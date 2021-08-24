@@ -6,7 +6,7 @@
 #include<cmath>
 #include<limits>		//??
 
-//double PI = 3.14159;		//FIXIT
+//static const double PI;		//FIXIT
 
 class Point;
 std::ostream& operator<<(std::ostream& out, const std::pair<Point, Point>& p); 
@@ -14,10 +14,8 @@ std::ostream& operator<<(std::ostream& out, const std::pair<Point, Point>& p);
 
 class Point {
 public:
-	Point(double x=0.,double y=0.):x(x),y(y)
-	{
+	Point(double x=0.,double y=0.):x(x),y(y){}
 
-	}
 	double x;
 	double y;	
 };
@@ -46,16 +44,27 @@ private:
 	double d;
 };
 
+class Normal : public Curves {
+public:
+	Normal(double x = 0., double y = 0.):Curves(x, y)
+	{
+
+	}
+private:
+	Point Der = Point(0, 1);
+
+};
+
 class Ellipse :public Curves{
 public:
-	Ellipse(double x = 0., double y = 0., double rX = 0., double rY=0.):Curves(x,y),rX(rX),rY(rY)
+	Ellipse(double x = 0., double y = 0., double rX = 0., double rY=0.):Curves(x,y),a(rX),b(rY)
 	{
 		
 	}
 	std::pair<Point, Point> operator() (double t) override;
 private:
-	double rX;
-	double rY;
+	double a;
+	double b;
 	
 };
 

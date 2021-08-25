@@ -4,15 +4,15 @@
 
 #include<iostream>
 #include<cmath>
-#include<limits>		//??
+#include<limits>		
 
-//static const double PI;		//FIXIT
+
 
 class Point;
-std::ostream& operator<<(std::ostream& out, const std::pair<Point, Point>& p); 
+std::ostream& operator<<(std::ostream& out, const std::pair<Point, Point>& p);		//перегрузка вывода для пары точек
 
 
-class Point {
+class Point {	//
 public:
 	Point(double x=0.,double y=0.):x(x),y(y){}
 
@@ -20,49 +20,43 @@ public:
 	double y;	
 };
 
-class Curves {
+class Curves {		//базовый абстрактный класс для кривых
 public:
-	Curves(double x,double y):originPoint(x,y)
+	Curves(double x,double y):originPoint(x,y)		//конструктор принимает координаты начальной точки
 	{
 
 	}
-	virtual std::pair<Point, Point> operator() (double t) = 0;
+	virtual std::pair<Point, Point> operator() (double t) = 0;	 //функтор для, принимает t  в качетве параметра 
+			//возвращает пару из точек: первая = координаты от параметра t, вторая - ноль-вектор производной
+			//метод виртуальный, перегружается в каждом классе
 
-private:
+protected:
 	Point originPoint;
 };
 
-class Line :public Curves {
+class Line :public Curves {		// класс, описывающий прямые
 public:
-	Line(double x=0., double y=0.,double d=0.):Curves(x,y),d(d)
+	Line(double x=0., double y=0.,double d=0.):Curves(x,y),d(d)			//делегирует начальные точки в конструткор базоваго класса и инициализирует d
 	{
 
 	}
 	std::pair<Point, Point> operator() (double t) override;
 
-private:
+protected:
 	double d;
 };
 
-class Normal : public Curves {
+
+
+class Ellipse :public Curves{		//класс для эллипсов
 public:
-	Normal(double x = 0., double y = 0.):Curves(x, y)
+	Ellipse(double x = 0., double y = 0., double a = 1., double b=1.):Curves(x,y)
 	{
-
-	}
-private:
-	Point Der = Point(0, 1);
-
-};
-
-class Ellipse :public Curves{
-public:
-	Ellipse(double x = 0., double y = 0., double rX = 0., double rY=0.):Curves(x,y),a(rX),b(rY)
-	{
-		
+		this->a = a == 0. ? 1 : abs(a);	//проверка на 0,  присваивает значение по модулю
+		this->b = b == 0. ? 1 : abs(b);
 	}
 	std::pair<Point, Point> operator() (double t) override;
-private:
+protected:
 	double a;
 	double b;
 	
